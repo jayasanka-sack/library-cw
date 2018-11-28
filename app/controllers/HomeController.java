@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import dto.Book;
+import dto.DVD;
 import dto.Reader;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -35,6 +36,14 @@ public class HomeController extends Controller {
 
         return ok(Json.toJson(books));
     }
+
+    public Result getAllDvds() {
+
+        List<DVD> dvds = libraryManager.getAllDvds();
+
+        return ok(Json.toJson(dvds));
+    }
+
 
     public Result readers() {
 
@@ -87,6 +96,15 @@ public class HomeController extends Controller {
         libraryManager.addDvd(isbn, itemName, publisherId, readerId, languages, borrowDate);
 
         return ok("Adding new DVD successful");
+
+    }
+
+
+    public Result deleteItem(long isbn) {
+
+        libraryManager.deleteItem(isbn);
+
+        return ok("hoo");
 
     }
 

@@ -20,6 +20,17 @@ public class BookModel {
     @Column(name = "name")
     private String name;
 
+
+    @Column(name = "status")
+    private boolean status = true;
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
     public int getPageCount() {
         return pageCount;
     }

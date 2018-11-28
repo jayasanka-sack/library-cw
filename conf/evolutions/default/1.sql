@@ -18,6 +18,7 @@ create table author_books (
 create table books (
   isbn                          integer auto_increment not null,
   name                          varchar(255),
+  status                        tinyint(1) default 0 not null,
   pagecount                     integer not null,
   borrow_date                   datetime(6),
   reader                        integer,
@@ -28,6 +29,7 @@ create table dvds (
   isbn                          integer auto_increment not null,
   name                          varchar(255),
   langages                      varchar(255),
+  status                        tinyint(1) default 0 not null,
   borrow_date                   datetime(6),
   reader                        integer,
   publisher                     integer,

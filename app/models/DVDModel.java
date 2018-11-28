@@ -21,6 +21,17 @@ public class DVDModel extends Model {
     @Column(name = "langages")
     private String languages;
 
+    @Column(name = "status")
+    private boolean status = true;
+
+    public boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
+
     public String getLanguages() {
         return languages;
     }

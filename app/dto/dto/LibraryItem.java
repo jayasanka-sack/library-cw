@@ -6,6 +6,24 @@ public abstract class LibraryItem {
     private String itemName;
     private Reader reader;
     private Date borrowDate;
+    private String borrowDateText;
+    private boolean status;
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public String getBorrowDateText() {
+        return borrowDateText;
+    }
+
+    public void setBorrowDateText(String borrowDateText) {
+        this.borrowDateText = borrowDateText;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
 
     public int getItemID() {
         return itemID;
