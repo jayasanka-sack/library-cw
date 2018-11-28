@@ -11,22 +11,25 @@ create table author (
 
 create table author_books (
   author_id                     integer not null,
-  books_id                      integer not null,
-  constraint pk_author_books primary key (author_id,books_id)
+  books_isbn                    integer not null,
+  constraint pk_author_books primary key (author_id,books_isbn)
 );
 
 create table books (
-  id                            integer auto_increment not null,
+  isbn                          integer auto_increment not null,
   name                          varchar(255),
+  pagecount                     integer not null,
+  borrow_date                   datetime(6),
   reader                        integer,
-  constraint pk_books primary key (id)
+  constraint pk_books primary key (isbn)
 );
 
 create table dvds (
-  id                            integer auto_increment not null,
+  isbn                          integer auto_increment not null,
   name                          varchar(255),
+  borrow_date                   datetime(6),
   reader                        integer,
-  constraint pk_dvds primary key (id)
+  constraint pk_dvds primary key (isbn)
 );
 
 create table reader (
@@ -40,8 +43,8 @@ create table reader (
 alter table author_books add constraint fk_author_books_author foreign key (author_id) references author (id) on delete restrict on update restrict;
 create index ix_author_books_author on author_books (author_id);
 
-alter table author_books add constraint fk_author_books_books foreign key (books_id) references books (id) on delete restrict on update restrict;
-create index ix_author_books_books on author_books (books_id);
+alter table author_books add constraint fk_author_books_books foreign key (books_isbn) references books (isbn) on delete restrict on update restrict;
+create index ix_author_books_books on author_books (books_isbn);
 
 alter table books add constraint fk_books_reader foreign key (reader) references reader (id) on delete restrict on update restrict;
 create index ix_books_reader on books (reader);

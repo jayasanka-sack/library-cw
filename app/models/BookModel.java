@@ -2,17 +2,37 @@ package models;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Date;
+
+import play.data.format.*;
+import play.data.validation.*;
 
 @Entity
 @Table(name = "books")
 public class BookModel {
 
+//    Create colomns
+
     @Id
-    @Column(name = "id")
-    private int id;
+    @Column(name = "isbn")
+    private int isbn;
 
     @Column(name = "name")
     private String name;
+
+    public int getPageCount() {
+        return pageCount;
+    }
+
+    public void setPageCount(int pageCount) {
+        this.pageCount = pageCount;
+    }
+
+    @Column(name = "pageCount")
+    private int pageCount;
+
+    @Formats.DateTime(pattern="dd/MM/yyyy")
+    public Date borrowDate = new Date();
 
     @ManyToOne
     @JoinColumn(name = "reader", referencedColumnName = "id")
@@ -21,13 +41,24 @@ public class BookModel {
     @ManyToMany(mappedBy = "books")
     private List<AuthorModel> authors;
 
-    public int getId() {
-        return id;
+//    create getters and setters
+
+    public Date getBorrowDate() {
+        return borrowDate;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setBorrowDate(Date borrowDate) {
+        this.borrowDate = borrowDate;
     }
+
+    public int getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(int isbn) {
+        this.isbn = isbn;
+    }
+
 
     public String getName() {
         return name;
