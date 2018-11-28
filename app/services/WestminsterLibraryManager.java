@@ -5,36 +5,56 @@ import dto.Reader;
 import io.ebean.Ebean;
 import models.AuthorModel;
 import models.BookModel;
+import models.DVDModel;
 import models.ReaderModel;
+import models.PublisherModel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Date;
 
 public class WestminsterLibraryManager implements LibraryManager {
 
 
     @Override
-    public void addBook(String itemName, String authorName, String readerName) {
+    public void addBook(int isbn, String itemName, String authorId, String readerId, String pageCount, Date date) {
 
         BookModel book = new BookModel();
-
+        book.setIsbn(isbn);
         book.setName(itemName);
+        book.setPageCount(Integer.parseInt(pageCount));
+        book.setBorrowDate(date);
 
-        ReaderModel reader = new ReaderModel();
-        reader.setName(readerName);
+        ReaderModel reader = Ebean.find(ReaderModel.class).where().eq("id", 1).findOne();
 
-        Ebean.save(reader);
-
-        AuthorModel author = new AuthorModel();
-        author.setName(authorName);
-
-        Ebean.save(author);
+        AuthorModel author = Ebean.find(AuthorModel.class).where().eq("id", 1).findOne();;
 
         book.setReader(reader);
         book.setAuthors(Arrays.asList(author));
 
         Ebean.save(book);
+
+    }
+
+
+    @Override
+    public void addDvd(int isbn, String itemName, String publisherId, String readerId, String languages, Date date) {
+
+        DVDModel dvd = new DVDModel();
+        dvd.setIsbn(isbn);
+        dvd.setName(itemName);
+        dvd.setLanguages(languages);
+        dvd.setBorrowDate(date);
+
+        ReaderModel reader = Ebean.find(ReaderModel.class).where().eq("id", readerId).findOne();
+
+        PublisherModel publisher = Ebean.find(PublisherModel.class).where().eq("id", publisherId).findOne();;
+
+        dvd.setReader(reader);
+        dvd.setPublisher(publisher);
+
+        Ebean.save(dvd);
 
     }
 

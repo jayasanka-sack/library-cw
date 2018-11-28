@@ -1,11 +1,11 @@
 package models;
 
 import io.ebean.Model;
+import play.data.format.*;
+import play.data.validation.*;
 
 import javax.persistence.*;
 import java.util.Date;
-import play.data.format.*;
-import play.data.validation.*;
 
 @Entity
 @Table(name = "dvds")
@@ -17,6 +17,17 @@ public class DVDModel extends Model {
 
     @Column(name = "name")
     private String name;
+
+    @Column(name = "langages")
+    private String languages;
+
+    public String getLanguages() {
+        return languages;
+    }
+
+    public void setLanguages(String languages) {
+        this.languages = languages;
+    }
 
     @Formats.DateTime(pattern="dd/MM/yyyy")
     public Date borrowDate = new Date();
@@ -32,6 +43,18 @@ public class DVDModel extends Model {
     @ManyToOne
     @JoinColumn(name = "reader", referencedColumnName = "id")
     private ReaderModel reader;
+
+    @ManyToOne
+    @JoinColumn(name = "publisher", referencedColumnName = "id")
+    private PublisherModel publisher;
+
+    public PublisherModel getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(PublisherModel publisher) {
+        this.publisher = publisher;
+    }
 
     public int getIsbn() {
         return isbn;

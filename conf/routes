@@ -3,15 +3,17 @@
 # ~~~~
 
 # An example controller showing a sample home page
-GET     /                           controllers.HomeController.index
+GET         /                    controllers.HomeController.index
 
 # Map static resources from the /public folder to the /assets URL path
-GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
+GET         /assets/*file        controllers.Assets.versioned(path="/public", file: Asset)
 
 
 
-GET     /books                      controllers.HomeController.index
+GET         /books               controllers.HomeController.index
 
-POST    /books                      controllers.HomeController.addBook
+POST        /books               controllers.HomeController.addBook
 
-GET    /readers                      controllers.HomeController.readers
+POST        /dvds               controllers.HomeController.addDvd
+
+GET         /readers             controllers.HomeController.readers

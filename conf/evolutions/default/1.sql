@@ -27,9 +27,17 @@ create table books (
 create table dvds (
   isbn                          integer auto_increment not null,
   name                          varchar(255),
+  langages                      varchar(255),
   borrow_date                   datetime(6),
   reader                        integer,
+  publisher                     integer,
   constraint pk_dvds primary key (isbn)
+);
+
+create table publisher (
+  id                            integer auto_increment not null,
+  name                          varchar(255),
+  constraint pk_publisher primary key (id)
 );
 
 create table reader (
@@ -52,6 +60,9 @@ create index ix_books_reader on books (reader);
 alter table dvds add constraint fk_dvds_reader foreign key (reader) references reader (id) on delete restrict on update restrict;
 create index ix_dvds_reader on dvds (reader);
 
+alter table dvds add constraint fk_dvds_publisher foreign key (publisher) references publisher (id) on delete restrict on update restrict;
+create index ix_dvds_publisher on dvds (publisher);
+
 
 # --- !Downs
 
@@ -67,6 +78,9 @@ drop index ix_books_reader on books;
 alter table dvds drop foreign key fk_dvds_reader;
 drop index ix_dvds_reader on dvds;
 
+alter table dvds drop foreign key fk_dvds_publisher;
+drop index ix_dvds_publisher on dvds;
+
 drop table if exists author;
 
 drop table if exists author_books;
@@ -74,6 +88,8 @@ drop table if exists author_books;
 drop table if exists books;
 
 drop table if exists dvds;
+
+drop table if exists publisher;
 
 drop table if exists reader;
 

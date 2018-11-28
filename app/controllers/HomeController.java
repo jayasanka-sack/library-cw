@@ -8,9 +8,11 @@ import play.mvc.Controller;
 import play.mvc.Result;
 import services.LibraryManager;
 import services.WestminsterLibraryManager;
-import play.data.DynamicForm;
 
-
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -44,14 +46,47 @@ public class HomeController extends Controller {
     public Result addBook() {
 
         JsonNode body = request().body().asJson();
-
-        String readerName = body.get("readerName").asText();
+        int isbn = Integer.parseInt(body.get("isbn").asText());
+        String readerId = body.get("readerId").asText();
         String itemName = body.get("itemName").asText();
-        String authorName = body.get("authorName").asText();
+        String authorId = body.get("authorId").asText();
+        String pageCount = body.get("pageCount").asText();
+        String borrowDateText = body.get("borrowDate").asText();
+        Date borrowDate = null;
+        try {
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+             borrowDate = df.parse(borrowDateText);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
-        libraryManager.addBook(itemName, authorName, readerName);
+
+        libraryManager.addBook(isbn, itemName, authorId, readerId, pageCount, borrowDate);
 
         return ok("Adding new book successful");
+
+    }
+    public Result addDvd() {
+
+        JsonNode body = request().body().asJson();
+        int isbn = Integer.parseInt(body.get("isbn").asText());
+        String readerId = body.get("readerId").asText();
+        String itemName = body.get("itemName").asText();
+        String publisherId = body.get("publisherId").asText();
+        String languages = body.get("languages").asText();
+        String borrowDateText = body.get("borrowDate").asText();
+        Date borrowDate = null;
+        try {
+            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+            borrowDate = df.parse(borrowDateText);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
+        libraryManager.addDvd(isbn, itemName, publisherId, readerId, languages, borrowDate);
+
+        return ok("Adding new DVD successful");
 
     }
 
