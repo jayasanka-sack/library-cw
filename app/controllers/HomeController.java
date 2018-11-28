@@ -2,6 +2,7 @@ package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import dto.Book;
+import dto.Reader;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
@@ -29,6 +30,13 @@ public class HomeController extends Controller {
     public Result index() {
 
         List<Book> books = libraryManager.getAllBooks();
+
+        return ok(Json.toJson(books));
+    }
+
+    public Result readers() {
+
+        List<Reader> books = libraryManager.getAllReaders();
 
         return ok(Json.toJson(books));
     }

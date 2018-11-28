@@ -32,6 +32,8 @@ create table dvds (
 create table reader (
   id                            integer auto_increment not null,
   name                          varchar(255),
+  mobile                        varchar(255),
+  email                         varchar(255),
   constraint pk_reader primary key (id)
 );
 

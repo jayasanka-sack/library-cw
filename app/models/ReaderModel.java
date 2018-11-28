@@ -18,6 +18,28 @@ public class ReaderModel extends Model {
     @Column(name = "name")
     private String name;
 
+    @Column(name = "mobile")
+    private String mobile;
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @Column(name = "email")
+    private String email;
+
     public int getId() {
         return id;
     }

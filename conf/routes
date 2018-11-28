@@ -13,3 +13,5 @@ GET     /assets/*file               controllers.Assets.versioned(path="/public",
 GET     /books                      controllers.HomeController.index
 
 POST    /books                      controllers.HomeController.addBook
+
+GET    /readers                      controllers.HomeController.readers

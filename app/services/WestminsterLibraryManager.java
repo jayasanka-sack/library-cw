@@ -52,9 +52,25 @@ public class WestminsterLibraryManager implements LibraryManager {
         return books;
     }
 
+
+    @Override
+    public List<Reader> getAllReaders() {
+        List<ReaderModel> readerModels = Ebean.find(ReaderModel.class).findList();
+
+        List<Reader> readers = new ArrayList<>();
+
+        for (ReaderModel readerModel : readerModels) {
+            Reader reader = getReaderDTObyModel(readerModel);
+            readers.add(reader);
+        }
+
+        return readers;
+    }
+
     private Book getBookDTObyModel(BookModel bookModel) {
         Book book = new Book();
         book.setItemName(bookModel.getName());
+        book.setItemID(bookModel.getId());
         book.setItemID(bookModel.getId());
 
         Reader reader = getReaderDTObyModel(bookModel.getReader());
@@ -69,6 +85,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         Reader reader = new Reader();
         reader.setReaderName(readerModel.getName());
         reader.setReaderID(readerModel.getId());
+        reader.setReaderEmail(readerModel.getEmail());
+        reader.setReaderMobile(readerModel.getMobile());
 
         return reader;
     }
