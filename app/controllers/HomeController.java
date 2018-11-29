@@ -96,6 +96,12 @@ public class HomeController extends Controller {
 
     }
 
+    public Result borrowItem(long id){
+        JsonNode body = request().body().asJson();
+        String readerId = body.get("readerId").asText();
+        return ok(libraryManager.borrowItem(id,readerId));
+    }
+
 
     public Result deleteItem(long isbn) {
 

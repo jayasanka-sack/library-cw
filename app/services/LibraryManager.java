@@ -20,5 +20,7 @@ public interface LibraryManager {
 
     List<Reader> getAllReaders();
 
+
     String returnItem(long isbn);
+    String borrowItem(long isbn, String readerId);
 }

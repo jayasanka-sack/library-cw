@@ -8,10 +8,7 @@ import io.ebean.Ebean;
 import models.*;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Date;
+import java.util.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.concurrent.TimeUnit;
@@ -179,10 +176,10 @@ public class WestminsterLibraryManager implements LibraryManager {
                         message = "Item Returned Successfully!";
                     }
 
-                }  else {
+                } else {
                     message = "Item already returned";
                 }
-            }else {
+            } else {
                 message = "The isbn is invalid";
             }
 
@@ -190,18 +187,65 @@ public class WestminsterLibraryManager implements LibraryManager {
         return message;
     }
 
+    @Override
+    public String borrowItem(long isbn, String readerId) {
+        String message = "";
+
+        ReaderModel reader = Ebean.find(ReaderModel.class).where().eq("id", readerId).findOne();
+        if (reader == null) {
+            return "Invalid reader Id";
+        }
+        BookModel book = Ebean.find(BookModel.class).where().eq("isbn", isbn).eq("status", true).findOne();
+        if (book != null) {
+            if (book.getReader() != null) {
+                Date expectedDate = addDaysToDate(book.getBorrowDate(), 7);
+                return "The book has been already borrowed. However it should be returned on " + convertDateToString(expectedDate);
+            }
+            book.setReader(reader);
+            book.setBorrowDate(new Date());
+            Ebean.save(book);
+            message = "Book marked as Borrowed Successfully!";
+        } else {
+            DVDModel dvd = Ebean.find(DVDModel.class).where().eq("isbn", isbn).eq("status", true).findOne();
+            if (dvd != null) {
+                if (dvd.getReader() != null) {
+                    Date expectedDate = addDaysToDate(dvd.getBorrowDate(), 3);
+                    return "The dvd has been already borrowed. However it should be returned on " + convertDateToString(expectedDate);
+                }
+                dvd.setReader(reader);
+                dvd.setBorrowDate(new Date());
+                Ebean.save(dvd);
+                message = "The DVD marked as Borrowed Successfully!";
+
+            }
+        }
+
+
+        return message;
+    }
+
+    private Date addDaysToDate(Date borrowDate, int days) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(borrowDate);
+        c.add(Calendar.DAY_OF_MONTH, days);
+
+        return c.getTime();
+    }
+
     private Book getBookDTObyModel(BookModel bookModel) {
         Book book = new Book();
         book.setItemName(bookModel.getName());
         book.setItemID(bookModel.getIsbn());
-        book.setBorrowDate(bookModel.getBorrowDate());
-        book.setBorrowDateText(convertDateToString(bookModel.getBorrowDate()));
 
         book.setPageCount(bookModel.getPageCount());
         book.setStatus(bookModel.getStatus());
-
-        Reader reader = getReaderDTObyModel(bookModel.getReader());
-        book.setReader(reader);
+        ReaderModel r = bookModel.getReader();
+        if (r != null) {
+            Reader reader = getReaderDTObyModel(r);
+            book.setReader(reader);
+            book.setBorrowDate(bookModel.getBorrowDate());
+            book.setBorrowDateText(convertDateToString(bookModel.getBorrowDate()));
+        }
 
         return book;
     }
@@ -210,12 +254,14 @@ public class WestminsterLibraryManager implements LibraryManager {
         DVD dvd = new DVD();
         dvd.setItemName(dvdModel.getName());
         dvd.setItemID(dvdModel.getIsbn());
-        dvd.setBorrowDate(dvdModel.getBorrowDate());
-        dvd.setBorrowDateText(convertDateToString(dvdModel.getBorrowDate()));
         dvd.setStatus(dvdModel.getStatus());
-        Reader reader = getReaderDTObyModel(dvdModel.getReader());
-        dvd.setReader(reader);
-
+        ReaderModel r = dvdModel.getReader();
+        if (r != null) {
+            Reader reader = getReaderDTObyModel(r);
+            dvd.setReader(reader);
+            dvd.setBorrowDate(dvdModel.getBorrowDate());
+            dvd.setBorrowDateText(convertDateToString(dvdModel.getBorrowDate()));
+        }
         return dvd;
     }
 

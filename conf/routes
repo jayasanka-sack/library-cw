@@ -25,3 +25,6 @@ GET         /readers             controllers.HomeController.readers
 DELETE         /items/:id             controllers.HomeController.deleteItem(id: Long)
 
 POST         /items/:id/return             controllers.HomeController.retunItem(id: Long)
+
+POST         /items/:id/borrow             controllers.HomeController.borrowItem(id: Long)
+
