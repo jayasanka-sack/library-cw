@@ -32,7 +32,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         ReaderModel reader = Ebean.find(ReaderModel.class).where().eq("id", readerId).findOne();
 
         AuthorModel author = Ebean.find(AuthorModel.class).where().eq("id", authorId).findOne();
-        ;
+
 
         book.setReader(reader);
         book.setAuthors(Arrays.asList(author));
