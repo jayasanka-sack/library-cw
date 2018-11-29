@@ -7,28 +7,35 @@ import dto.Reader;
 import io.ebean.Ebean;
 import models.*;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
 
 public class WestminsterLibraryManager implements LibraryManager {
 
+    private static DecimalFormat df2 = new DecimalFormat(".##");
 
     @Override
-    public void addBook(int isbn, String itemName, String authorId, String readerId, String pageCount, Date date) {
+    public void addBook(int isbn, String itemName, String authorId, String readerId, String pageCount) {
 
         BookModel book = new BookModel();
         book.setIsbn(isbn);
         book.setName(itemName);
         book.setPageCount(Integer.parseInt(pageCount));
-        book.setBorrowDate(date);
 
         ReaderModel reader = Ebean.find(ReaderModel.class).where().eq("id", readerId).findOne();
 
         AuthorModel author = Ebean.find(AuthorModel.class).where().eq("id", authorId).findOne();
+
+        if (reader != null)
+            book.setBorrowDate(new Date());
+        else
+            book.setBorrowDate(null);
 
 
         book.setReader(reader);
@@ -40,17 +47,19 @@ public class WestminsterLibraryManager implements LibraryManager {
 
 
     @Override
-    public void addDvd(int isbn, String itemName, String publisherId, String readerId, String languages, Date date) {
+    public void addDvd(int isbn, String itemName, String publisherId, String readerId, String languages) {
 
         DVDModel dvd = new DVDModel();
         dvd.setIsbn(isbn);
         dvd.setName(itemName);
         dvd.setLanguages(languages);
-        dvd.setBorrowDate(date);
         ReaderModel reader = Ebean.find(ReaderModel.class).where().eq("id", readerId).findOne();
 
         PublisherModel publisher = Ebean.find(PublisherModel.class).where().eq("id", publisherId).findOne();
-
+        if (reader != null)
+            dvd.setBorrowDate(new Date());
+        else
+            dvd.setBorrowDate(null);
 
         dvd.setReader(reader);
         dvd.setPublisher(publisher);
@@ -125,6 +134,62 @@ public class WestminsterLibraryManager implements LibraryManager {
         return readers;
     }
 
+    @Override
+    public String returnItem(long isbn) {
+        BookModel book = Ebean.find(BookModel.class).where().eq("isbn", isbn).eq("status", true).findOne();
+        String message = "";
+        if (book != null) {
+            if (book.getReader() != null) {
+                Date now = new Date();
+                Date borrowedDate = book.getBorrowDate();
+                long diffInMillies = Math.abs(now.getTime() - borrowedDate.getTime());
+                long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+                book.setReader(null);
+                book.setBorrowDate(null);
+
+                Ebean.save(book);
+
+                if (diff > 7) {
+                    double fee = calculateFee(diffInMillies, diff, 7);
+                    message = "You have exceeded the time, your fee is £ " + df2.format(fee);
+                } else {
+                    message = "Item Returned Successfully!";
+                }
+            } else {
+                message = "Item already returned";
+            }
+
+        } else {
+            DVDModel dvd = Ebean.find(DVDModel.class).where().eq("isbn", isbn).eq("status", true).findOne();
+            if (dvd != null) {
+                if (dvd.getReader() != null) {
+                    Date now = new Date();
+                    Date borrowedDate = dvd.getBorrowDate();
+                    long diffInMillies = Math.abs(now.getTime() - borrowedDate.getTime());
+                    long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+                    dvd.setReader(null);
+                    dvd.setBorrowDate(null);
+                    Ebean.save(dvd);
+                    if (diff > 3) {
+                        double fee = calculateFee(diffInMillies, diff, 3);
+                        message = "You have exceeded the time, your fee is £ " + df2.format(fee);
+                    } else {
+                        message = "Item Returned Successfully!";
+                    }
+
+                }  else {
+                    message = "Item already returned";
+                }
+            }else {
+                message = "The isbn is invalid";
+            }
+
+        }
+        return message;
+    }
+
     private Book getBookDTObyModel(BookModel bookModel) {
         Book book = new Book();
         book.setItemName(bookModel.getName());
@@ -166,9 +231,22 @@ public class WestminsterLibraryManager implements LibraryManager {
 
     private String convertDateToString(Date date) {
 
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         String strDate = dateFormat.format(date);
-        System.out.println(5555);
         return strDate;
+    }
+
+    private double calculateFee(long difference, long diff, int max) {
+        double fee = 0;
+        long hours = TimeUnit.HOURS.convert(difference, TimeUnit.MILLISECONDS) - max * 24;
+        double normalFee = 0.2;
+        double extraFee = 0.5;
+        int hoursFor3Days = 24 * 3;
+        if (diff > 3) {
+            fee = normalFee * hours;
+        } else {
+            fee = normalFee * hoursFor3Days + extraFee * (hours - hoursFor3Days);
+        }
+        return fee;
     }
 }

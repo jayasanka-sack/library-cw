@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface LibraryManager {
 
-    void addBook(int isbn, String itemName, String authorId, String readerId, String pageCount, Date date);
-    void addDvd(int isbn, String itemName, String publisherId, String readerId, String languages, Date date);
+    void addBook(int isbn, String itemName, String authorId, String readerId, String pageCount);
+    void addDvd(int isbn, String itemName, String publisherId, String readerId, String languages);
     void deleteItem(long isbn);
 
     List<Book> getAllBooks();
@@ -19,4 +19,6 @@ public interface LibraryManager {
     List<LibraryItem> getAllItems();
 
     List<Reader> getAllReaders();
+
+    String returnItem(long isbn);
 }

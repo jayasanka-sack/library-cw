@@ -45,6 +45,11 @@ public class HomeController extends Controller {
         return ok(Json.toJson(items));
     }
 
+    public Result retunItem(long id) {
+
+        return ok(libraryManager.returnItem(id));
+    }
+
     public Result getAllDvds() {
 
         List<DVD> dvds = libraryManager.getAllDvds();
@@ -68,17 +73,10 @@ public class HomeController extends Controller {
         String itemName = body.get("itemName").asText();
         String authorId = body.get("authorId").asText();
         String pageCount = body.get("pageCount").asText();
-        String borrowDateText = body.get("borrowDate").asText();
-        Date borrowDate = null;
-        try {
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-             borrowDate = df.parse(borrowDateText);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
 
-        libraryManager.addBook(isbn, itemName, authorId, readerId, pageCount, borrowDate);
+
+        libraryManager.addBook(isbn, itemName, authorId, readerId, pageCount);
 
         return ok("Adding new book successful");
 
@@ -91,17 +89,8 @@ public class HomeController extends Controller {
         String itemName = body.get("itemName").asText();
         String publisherId = body.get("publisherId").asText();
         String languages = body.get("languages").asText();
-        String borrowDateText = body.get("borrowDate").asText();
-        Date borrowDate = null;
-        try {
-            DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-            borrowDate = df.parse(borrowDateText);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
 
-
-        libraryManager.addDvd(isbn, itemName, publisherId, readerId, languages, borrowDate);
+        libraryManager.addDvd(isbn, itemName, publisherId, readerId, languages);
 
         return ok("Adding new DVD successful");
 
