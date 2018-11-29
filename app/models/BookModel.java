@@ -31,6 +31,7 @@ public class BookModel {
     public void setStatus(boolean status) {
         this.status = status;
     }
+
     public int getPageCount() {
         return pageCount;
     }
@@ -42,7 +43,7 @@ public class BookModel {
     @Column(name = "pageCount")
     private int pageCount;
 
-    @Formats.DateTime(pattern="dd/MM/yyyy")
+    @Formats.DateTime(pattern = "dd/MM/yyyy")
     public Date borrowDate = new Date();
 
     @ManyToOne

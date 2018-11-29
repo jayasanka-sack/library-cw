@@ -2,6 +2,7 @@ package services;
 
 import dto.Book;
 import dto.DVD;
+import dto.LibraryItem;
 import dto.Reader;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ public interface LibraryManager {
 
     List<Book> getAllBooks();
     List<DVD> getAllDvds();
+    List<LibraryItem> getAllItems();
 
     List<Reader> getAllReaders();
 }

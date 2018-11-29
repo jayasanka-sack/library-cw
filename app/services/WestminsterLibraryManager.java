@@ -2,13 +2,10 @@ package services;
 
 import dto.Book;
 import dto.DVD;
+import dto.LibraryItem;
 import dto.Reader;
 import io.ebean.Ebean;
-import models.AuthorModel;
-import models.BookModel;
-import models.DVDModel;
-import models.ReaderModel;
-import models.PublisherModel;
+import models.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -53,7 +50,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         ReaderModel reader = Ebean.find(ReaderModel.class).where().eq("id", readerId).findOne();
 
         PublisherModel publisher = Ebean.find(PublisherModel.class).where().eq("id", publisherId).findOne();
-        ;
+
 
         dvd.setReader(reader);
         dvd.setPublisher(publisher);
@@ -88,6 +85,15 @@ public class WestminsterLibraryManager implements LibraryManager {
         }
 
         return dvds;
+    }
+
+    @Override
+    public List<LibraryItem> getAllItems() {
+        List<LibraryItem> items = new ArrayList<>();
+        items.addAll(getAllDvds());
+        items.addAll(getAllBooks());
+
+        return items;
     }
 
     @Override
@@ -127,6 +133,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         book.setBorrowDateText(convertDateToString(bookModel.getBorrowDate()));
 
         book.setPageCount(bookModel.getPageCount());
+        book.setStatus(bookModel.getStatus());
 
         Reader reader = getReaderDTObyModel(bookModel.getReader());
         book.setReader(reader);
@@ -140,7 +147,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         dvd.setItemID(dvdModel.getIsbn());
         dvd.setBorrowDate(dvdModel.getBorrowDate());
         dvd.setBorrowDateText(convertDateToString(dvdModel.getBorrowDate()));
-
+        dvd.setStatus(dvdModel.getStatus());
         Reader reader = getReaderDTObyModel(dvdModel.getReader());
         dvd.setReader(reader);
 

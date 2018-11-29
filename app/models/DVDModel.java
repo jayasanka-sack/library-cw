@@ -2,7 +2,6 @@ package models;
 
 import io.ebean.Model;
 import play.data.format.*;
-import play.data.validation.*;
 
 import javax.persistence.*;
 import java.util.Date;

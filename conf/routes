@@ -18,6 +18,8 @@ POST        /dvds               controllers.HomeController.addDvd
 
 GET        /dvds               controllers.HomeController.getAllDvds
 
+GET        /items               controllers.HomeController.getAllItems
+
 GET         /readers             controllers.HomeController.readers
 
 DELETE         /items/:id             controllers.HomeController.deleteItem(id: Long)
