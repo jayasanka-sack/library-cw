@@ -1,9 +1,6 @@
 package services;
 
-import dto.Book;
-import dto.DVD;
-import dto.LibraryItem;
-import dto.Reader;
+import dto.*;
 import io.ebean.Ebean;
 import models.*;
 
@@ -11,6 +8,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class WestminsterLibraryManager implements LibraryManager {
@@ -223,6 +221,13 @@ public class WestminsterLibraryManager implements LibraryManager {
 
         return message;
     }
+
+    @Override
+    public List<OverDueItem> getReport() {
+        List<LibraryItem> items = getAllItems();
+        return null;
+    }
+
 
     private Date addDaysToDate(Date borrowDate, int days) {
         Calendar c = Calendar.getInstance();

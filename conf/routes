@@ -28,3 +28,5 @@ POST         /items/:id/return             controllers.HomeController.retunItem(
 
 POST         /items/:id/borrow             controllers.HomeController.borrowItem(id: Long)
 
+GET         /report             controllers.HomeController.getReport
+

@@ -1,9 +1,6 @@
 package services;
 
-import dto.Book;
-import dto.DVD;
-import dto.LibraryItem;
-import dto.Reader;
+import dto.*;
 
 import java.util.Date;
 import java.util.List;
@@ -23,4 +20,6 @@ public interface LibraryManager {
 
     String returnItem(long isbn);
     String borrowItem(long isbn, String readerId);
+
+    List<OverDueItem> getReport();
 }
