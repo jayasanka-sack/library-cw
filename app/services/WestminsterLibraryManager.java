@@ -4,6 +4,8 @@ import dto.*;
 import io.ebean.Ebean;
 import models.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.text.DateFormat;
@@ -285,11 +287,14 @@ public class WestminsterLibraryManager implements LibraryManager {
         } else {
             fee = normalFee * hoursFor3Days + extraFee * (hours - hoursFor3Days);
         }
-        return fee;
+        return round(fee,2);
     }
 
     private boolean isOverDude(LibraryItem item) {
         String className = item.getClass().getName();
+        if(item.getReader()==null){
+            return false;
+        }
         int maxDays = 0;
         if (className.equals("dto.Book")) {
             maxDays = 3;
@@ -302,7 +307,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         long diffInMillies = Math.abs(now.getTime() - borrowedDate.getTime());
         long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
 
-        return diff > maxDays;
+        return (diff > maxDays);
     }
 
 
@@ -378,5 +383,13 @@ public class WestminsterLibraryManager implements LibraryManager {
             fee = normalFee * hoursFor3Days + extraFee * (hours - hoursFor3Days);
         }
         return fee;
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 }
