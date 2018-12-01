@@ -1,5 +1,7 @@
 package dto;
+
 import java.util.Date;
+
 public abstract class LibraryItem {
 
     private int itemID;
@@ -7,19 +9,39 @@ public abstract class LibraryItem {
     private Reader reader;
     private Date borrowDate;
     private String borrowDateText;
+    private String type;
 
-    public LibraryItem() {
+    public String getType() {
+        return type;
     }
 
-    public LibraryItem(int itemID, String itemName, Reader reader, Date borrowDate, String borrowDateText, boolean status) {
+    public void setType(String type) {
+        this.type = type;
+    }
 
+    public LibraryItem() {
+
+    }
+
+    public LibraryItem(int itemID, String itemName, Reader reader, Date borrowDate, String borrowDateText, String type, boolean status) {
         this.itemID = itemID;
         this.itemName = itemName;
         this.reader = reader;
         this.borrowDate = borrowDate;
         this.borrowDateText = borrowDateText;
+        this.type = type;
         this.status = status;
     }
+
+//    public LibraryItem(int itemID, String itemName, Reader reader, Date borrowDate, String borrowDateText, boolean status) {
+//
+//        this.itemID = itemID;
+//        this.itemName = itemName;
+//        this.reader = reader;
+//        this.borrowDate = borrowDate;
+//        this.borrowDateText = borrowDateText;
+//        this.status = status;
+//    }
 
     private boolean status;
 

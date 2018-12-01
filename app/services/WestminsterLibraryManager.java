@@ -231,7 +231,7 @@ public class WestminsterLibraryManager implements LibraryManager {
 
             if (isOverDude(item)) {
                 double fee = calculateFee(item);
-                OverDueItem overDueItem = new OverDueItem(item.getItemID(), item.getItemName(), item.getReader(), item.getBorrowDate(), item.getBorrowDateText(), item.isStatus());
+                OverDueItem overDueItem = new OverDueItem(item.getItemID(), item.getItemName(), item.getReader(), item.getBorrowDate(), item.getBorrowDateText(),item.getType(), item.isStatus());
                 overDueItems.add(overDueItem);
                 Date returnDate = itemReturnDate(item);
                 overDueItem.setReturnDateText(convertDateToString(returnDate));
@@ -318,6 +318,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         Book book = new Book();
         book.setItemName(bookModel.getName());
         book.setItemID(bookModel.getIsbn());
+        book.setType("book");
 
         book.setPageCount(bookModel.getPageCount());
         book.setStatus(bookModel.getStatus());
@@ -338,6 +339,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         dvd.setItemID(dvdModel.getIsbn());
         dvd.setStatus(dvdModel.getStatus());
         ReaderModel r = dvdModel.getReader();
+        dvd.setType("DVD");
         if (r != null) {
             Reader reader = getReaderDTObyModel(r);
             dvd.setReader(reader);

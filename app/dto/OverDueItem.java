@@ -29,8 +29,8 @@ public class OverDueItem extends LibraryItem implements Comparable<OverDueItem>{
         return fee;
     }
 
-    public OverDueItem(int itemID, String itemName, Reader reader, Date borrowDate, String borrowDateText, boolean status) {
-        super(itemID, itemName, reader, borrowDate, borrowDateText, status);
+    public OverDueItem(int itemID, String itemName, Reader reader, Date borrowDate, String borrowDateText, String type, boolean status) {
+        super(itemID, itemName, reader, borrowDate, borrowDateText, type, status);
     }
 
     public void setFee(double fee) {
