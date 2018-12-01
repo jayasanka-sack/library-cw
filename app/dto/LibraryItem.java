@@ -7,6 +7,20 @@ public abstract class LibraryItem {
     private Reader reader;
     private Date borrowDate;
     private String borrowDateText;
+
+    public LibraryItem() {
+    }
+
+    public LibraryItem(int itemID, String itemName, Reader reader, Date borrowDate, String borrowDateText, boolean status) {
+
+        this.itemID = itemID;
+        this.itemName = itemName;
+        this.reader = reader;
+        this.borrowDate = borrowDate;
+        this.borrowDateText = borrowDateText;
+        this.status = status;
+    }
+
     private boolean status;
 
     public boolean isStatus() {

@@ -225,7 +225,84 @@ public class WestminsterLibraryManager implements LibraryManager {
     @Override
     public List<OverDueItem> getReport() {
         List<LibraryItem> items = getAllItems();
-        return null;
+        List<OverDueItem> overDueItems = new ArrayList<>();
+
+        for (LibraryItem item : items) {
+
+            if (isOverDude(item)) {
+                double fee = calculateFee(item);
+                OverDueItem overDueItem = new OverDueItem(item.getItemID(), item.getItemName(), item.getReader(), item.getBorrowDate(), item.getBorrowDateText(), item.isStatus());
+                overDueItems.add(overDueItem);
+                Date returnDate = itemReturnDate(item);
+                overDueItem.setReturnDateText(convertDateToString(returnDate));
+                overDueItem.setReturnDate(returnDate);
+                overDueItem.setFee(fee);
+            }
+            Collections.sort(overDueItems);
+        }
+        return overDueItems;
+    }
+
+    private Date itemReturnDate(LibraryItem overDueItem) {
+        String className = overDueItem.getClass().getName();
+
+        int maxDays = 0;
+        if (className.equals("dto.Book")) {
+            maxDays = 3;
+        } else if (className.equals("dto.DVD")) {
+            maxDays = 7;
+        }
+
+        Date borrowedDate = overDueItem.getBorrowDate();
+        Calendar c = Calendar.getInstance();
+        c.setTime(borrowedDate);
+        c.add(Calendar.DAY_OF_MONTH, maxDays);
+        return c.getTime();
+    }
+
+    private double calculateFee(LibraryItem item) {
+        String className = item.getClass().getName();
+        double fee;
+
+        int maxDays = 0;
+        if (className.equals("dto.Book")) {
+            maxDays = 3;
+        } else if (className.equals("dto.DVD")) {
+            maxDays = 7;
+        }
+
+        Date now = new Date();
+        Date borrowedDate = item.getBorrowDate();
+        long diffInMillies = Math.abs(now.getTime() - borrowedDate.getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+        long hours = TimeUnit.HOURS.convert(diffInMillies, TimeUnit.MILLISECONDS) - maxDays * 24;
+        double normalFee = 0.2;
+        double extraFee = 0.5;
+        int hoursFor3Days = 24 * 3;
+        if (diff > 3) {
+            fee = normalFee * hours;
+        } else {
+            fee = normalFee * hoursFor3Days + extraFee * (hours - hoursFor3Days);
+        }
+        return fee;
+    }
+
+    private boolean isOverDude(LibraryItem item) {
+        String className = item.getClass().getName();
+        int maxDays = 0;
+        if (className.equals("dto.Book")) {
+            maxDays = 3;
+        } else if (className.equals("dto.DVD")) {
+            maxDays = 7;
+        }
+
+        Date now = new Date();
+        Date borrowedDate = item.getBorrowDate();
+        long diffInMillies = Math.abs(now.getTime() - borrowedDate.getTime());
+        long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+        return diff > maxDays;
     }
 
 
