@@ -18,11 +18,24 @@ public class WestminsterLibraryManager implements LibraryManager {
     private static DecimalFormat df2 = new DecimalFormat(".##");
 
     @Override
-    public void addBook(int isbn, String itemName, String authorId, String readerId, String pageCount) {
+    public String addBook(int isbn, String itemName, String authorId, String readerId, String pageCount) {
+        LibraryItem item = getItemByIsbn(isbn);
 
         BookModel book = new BookModel();
         book.setIsbn(isbn);
+
+        if(item != null){
+            if(item.isStatus()) {
+                return "Item with this ISBN alrady exists";
+            }else if(item.getType().equals("DVD")) {
+                return "A DVD with same ISBN has added in history and it was removed later. Unable to add a DVD with same ISBN";
+            }else {
+                book = Ebean.find(BookModel.class).where().eq("isbn", isbn).findOne();
+            }
+        }
+
         book.setName(itemName);
+        book.setStatus(true);
         book.setPageCount(Integer.parseInt(pageCount));
 
         ReaderModel reader = Ebean.find(ReaderModel.class).where().eq("id", readerId).findOne();
@@ -39,7 +52,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         book.setAuthors(Arrays.asList(author));
 
         Ebean.save(book);
-
+        return "Book added Successfully";
     }
 
 

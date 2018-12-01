@@ -78,11 +78,7 @@ public class HomeController extends Controller {
         String authorId = body.get("authorId").asText();
         String pageCount = body.get("pageCount").asText();
 
-
-
-        libraryManager.addBook(isbn, itemName, authorId, readerId, pageCount);
-
-        return ok("Adding new book successful");
+        return ok(libraryManager.addBook(isbn, itemName, authorId, readerId, pageCount));
 
     }
     public Result addDvd() {

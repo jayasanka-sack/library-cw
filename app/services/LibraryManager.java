@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface LibraryManager {
 
-    void addBook(int isbn, String itemName, String authorId, String readerId, String pageCount);
+    String addBook(int isbn, String itemName, String authorId, String readerId, String pageCount);
     String addDvd(int isbn, String itemName, String publisherId, String readerId, String languages);
     void deleteItem(long isbn);
 
