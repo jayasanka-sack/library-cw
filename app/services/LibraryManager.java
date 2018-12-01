@@ -8,7 +8,7 @@ import java.util.List;
 public interface LibraryManager {
 
     void addBook(int isbn, String itemName, String authorId, String readerId, String pageCount);
-    void addDvd(int isbn, String itemName, String publisherId, String readerId, String languages);
+    String addDvd(int isbn, String itemName, String publisherId, String readerId, String languages);
     void deleteItem(long isbn);
 
     List<Book> getAllBooks();
@@ -22,4 +22,5 @@ public interface LibraryManager {
     String borrowItem(long isbn, String readerId);
 
     List<OverDueItem> getReport();
+
 }

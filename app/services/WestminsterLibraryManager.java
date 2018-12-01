@@ -44,11 +44,23 @@ public class WestminsterLibraryManager implements LibraryManager {
 
 
     @Override
-    public void addDvd(int isbn, String itemName, String publisherId, String readerId, String languages) {
+    public String addDvd(int isbn, String itemName, String publisherId, String readerId, String languages) {
 
+        LibraryItem item = getItemByIsbn(isbn);
         DVDModel dvd = new DVDModel();
         dvd.setIsbn(isbn);
+        if(item != null){
+            if(item.isStatus()) {
+                return "Item with this ISBN alrady exists";
+            }else if(item.getType().equals("book")) {
+                return "A book with same ISBN has added in history and it was removed later. Unable to add a DVD with same ISBN";
+            }else {
+                dvd = Ebean.find(DVDModel.class).where().eq("isbn", isbn).findOne();
+            }
+        }
+
         dvd.setName(itemName);
+        dvd.setStatus(true);
         dvd.setLanguages(languages);
         ReaderModel reader = Ebean.find(ReaderModel.class).where().eq("id", readerId).findOne();
 
@@ -62,7 +74,21 @@ public class WestminsterLibraryManager implements LibraryManager {
         dvd.setPublisher(publisher);
 
         Ebean.save(dvd);
+        return "DVD added Successfully";
+    }
 
+    private LibraryItem getItemByIsbn(int isbn) {
+        BookModel book = Ebean.find(BookModel.class).where().eq("isbn", isbn).findOne();
+        if(book != null){
+            return getBookDTObyModel(book);
+        }else {
+            DVDModel dvd = Ebean.find(DVDModel.class).where().eq("isbn", isbn).findOne();
+            if(dvd != null){
+                return getDVDDTObyModel(dvd);
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -244,6 +270,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         }
         return overDueItems;
     }
+
 
     private Date itemReturnDate(LibraryItem overDueItem) {
         String className = overDueItem.getClass().getName();

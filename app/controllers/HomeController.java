@@ -89,15 +89,13 @@ public class HomeController extends Controller {
 
         JsonNode body = request().body().asJson();
         int isbn = Integer.parseInt(body.get("isbn").asText());
-        String readerId = body.get("readerId").asText();
-        String itemName = body.get("itemName").asText();
-        String publisherId = body.get("publisherId").asText();
-        String languages = body.get("languages").asText();
 
-        libraryManager.addDvd(isbn, itemName, publisherId, readerId, languages);
+            String readerId = body.get("readerId").asText();
+            String itemName = body.get("itemName").asText();
+            String publisherId = body.get("publisherId").asText();
+            String languages = body.get("languages").asText();
 
-        return ok("Adding new DVD successful");
-
+            return ok(libraryManager.addDvd(isbn, itemName, publisherId, readerId, languages));
     }
 
     public Result borrowItem(long id){
