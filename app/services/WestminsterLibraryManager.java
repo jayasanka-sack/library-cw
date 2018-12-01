@@ -171,6 +171,35 @@ public class WestminsterLibraryManager implements LibraryManager {
     }
 
     @Override
+    public List<Author> getAllAuthors() {
+        List<AuthorModel> authorModels = Ebean.find(AuthorModel.class).findList();
+
+        List<Author> authors = new ArrayList<>();
+
+        for (AuthorModel authorModel : authorModels) {
+            Author author = getAuthorDTObyModel(authorModel);
+            authors.add(author);
+        }
+
+        return authors;
+    }
+
+    @Override
+    public List<Publisher> getAllPublishers() {
+        List<PublisherModel> publisherModels = Ebean.find(PublisherModel.class).findList();
+
+        List<Publisher> publishers = new ArrayList<>();
+
+        for (PublisherModel publisherModel : publisherModels) {
+            Publisher publisher = getPublisherDTObyModel(publisherModel);
+            publishers.add(publisher);
+        }
+
+        return publishers;
+    }
+
+
+    @Override
     public String returnItem(long isbn) {
         BookModel book = Ebean.find(BookModel.class).where().eq("isbn", isbn).eq("status", true).findOne();
         String message = "";
@@ -283,6 +312,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         }
         return overDueItems;
     }
+
 
 
     private Date itemReturnDate(LibraryItem overDueItem) {
@@ -402,6 +432,22 @@ public class WestminsterLibraryManager implements LibraryManager {
         reader.setReaderMobile(readerModel.getMobile());
 
         return reader;
+    }
+
+
+    private Author getAuthorDTObyModel(AuthorModel authorModel) {
+        Author author = new Author();
+        author.setAuthorID(authorModel.getId());
+        author.setAuthorName(authorModel.getName());
+
+        return author;
+    }
+    private Publisher getPublisherDTObyModel(PublisherModel publisherModel) {
+        Publisher publisher = new Publisher();
+        publisher.setPublisherID(publisherModel.getId());
+        publisher.setPublisherName(publisherModel.getName());
+
+        return publisher;
     }
 
     private String convertDateToString(Date date) {

@@ -22,6 +22,7 @@ public class HomeController extends Controller {
 
     LibraryManager libraryManager = new WestminsterLibraryManager();
 
+
     /**
      * An action that renders an HTML page with a welcome message.
      * The configuration in the <code>routes</code> file means that
@@ -68,6 +69,19 @@ public class HomeController extends Controller {
 
         return ok(Json.toJson(books));
     }
+    public Result getAllAuthors() {
+
+        List<Author> authors = libraryManager.getAllAuthors();
+
+        return ok(Json.toJson(authors));
+    }
+
+    public Result getAllPublishers() {
+        List<Publisher> publishers = libraryManager.getAllPublishers();
+
+        return ok(Json.toJson(publishers));
+    }
+
 
     public Result addBook() {
 

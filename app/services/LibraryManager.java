@@ -23,4 +23,6 @@ public interface LibraryManager {
 
     List<OverDueItem> getReport();
 
+    List<Author> getAllAuthors();
+    List<Publisher> getAllPublishers();
 }
