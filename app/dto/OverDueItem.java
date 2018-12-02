@@ -5,9 +5,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Date;
 
 public class OverDueItem extends LibraryItem implements Comparable<OverDueItem>{
-    String returnDateText;
-    Date returnDate;
-    double fee;
+    private String returnDateText;
+    private Date returnDate;
+    private double fee;
 
     public String getReturnDateText() {
         return returnDateText;
@@ -29,8 +29,11 @@ public class OverDueItem extends LibraryItem implements Comparable<OverDueItem>{
         return fee;
     }
 
-    public OverDueItem(int itemID, String itemName, Reader reader, Date borrowDate, String borrowDateText, String type, boolean status) {
-        super(itemID, itemName, reader, borrowDate, borrowDateText, type, status);
+    public OverDueItem(int itemID, String itemName, String type, String returnDateText, Date returnDate, double fee) {
+        super(itemID, itemName, type);
+        this.returnDateText = returnDateText;
+        this.returnDate = returnDate;
+        this.fee = fee;
     }
 
     public void setFee(double fee) {

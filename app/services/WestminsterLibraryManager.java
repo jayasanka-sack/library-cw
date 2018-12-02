@@ -301,12 +301,12 @@ public class WestminsterLibraryManager implements LibraryManager {
 
             if (isOverDude(item)) {
                 double fee = calculateFee(item);
-                OverDueItem overDueItem = new OverDueItem(item.getItemID(), item.getItemName(), item.getReader(), item.getBorrowDate(), item.getBorrowDateText(),item.getType(), item.isStatus());
-                overDueItems.add(overDueItem);
                 Date returnDate = itemReturnDate(item);
-                overDueItem.setReturnDateText(convertDateToString(returnDate));
-                overDueItem.setReturnDate(returnDate);
-                overDueItem.setFee(fee);
+                OverDueItem overDueItem = new OverDueItem(item.getItemID(), item.getItemName(), item.getType(), convertDateToString(returnDate),returnDate,fee);
+                overDueItem.setBorrowDate(item.getBorrowDate());
+                overDueItem.setReader(item.getReader());
+                overDueItem.setStatus(item.isStatus());
+                overDueItems.add(overDueItem);
             }
             Collections.sort(overDueItems);
         }
