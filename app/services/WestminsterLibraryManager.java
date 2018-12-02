@@ -414,12 +414,9 @@ public class WestminsterLibraryManager implements LibraryManager {
     }
 
     private DVD getDVDDTObyModel(DVDModel dvdModel) {
-        DVD dvd = new DVD();
-        dvd.setItemName(dvdModel.getName());
-        dvd.setItemID(dvdModel.getIsbn());
+        DVD dvd = new DVD(dvdModel.getIsbn(),dvdModel.getName(),"DVD",dvdModel.getLanguages());
         dvd.setStatus(dvdModel.getStatus());
         ReaderModel r = dvdModel.getReader();
-        dvd.setType("DVD");
         if (r != null) {
             Reader reader = getReaderDTObyModel(r);
             dvd.setReader(reader);
