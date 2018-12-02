@@ -436,9 +436,7 @@ public class WestminsterLibraryManager implements LibraryManager {
 
 
     private Author getAuthorDTObyModel(AuthorModel authorModel) {
-        Author author = new Author();
-        author.setAuthorID(authorModel.getId());
-        author.setAuthorName(authorModel.getName());
+        Author author = new Author(authorModel.getId(),authorModel.getName());
 
         return author;
     }
