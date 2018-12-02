@@ -1,11 +1,16 @@
 package dto;
 
-public class Reader {
+public class Reader extends Person{
 
-    private int readerID;
-    private String readerName;
+
     private String readerEmail;
     private String readerMobile;
+
+    public Reader(int personID, String personName, String readerEmail, String readerMobile) {
+        super(personID, personName);
+        this.readerEmail = readerEmail;
+        this.readerMobile = readerMobile;
+    }
 
     public String getReaderEmail() {
         return readerEmail;
@@ -23,19 +28,5 @@ public class Reader {
         this.readerMobile = readerMobile;
     }
 
-    public int getReaderID() {
-        return readerID;
-    }
 
-    public void setReaderID(int readerID) {
-        this.readerID = readerID;
-    }
-
-    public String getReaderName() {
-        return readerName;
-    }
-
-    public void setReaderName(String readerName) {
-        this.readerName = readerName;
-    }
 }

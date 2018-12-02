@@ -425,13 +425,8 @@ public class WestminsterLibraryManager implements LibraryManager {
     }
 
     private Reader getReaderDTObyModel(ReaderModel readerModel) {
-        Reader reader = new Reader();
-        reader.setReaderName(readerModel.getName());
-        reader.setReaderID(readerModel.getId());
-        reader.setReaderEmail(readerModel.getEmail());
-        reader.setReaderMobile(readerModel.getMobile());
 
-        return reader;
+        return new Reader(readerModel.getId(),readerModel.getName(),readerModel.getEmail(),readerModel.getMobile());
     }
 
 
