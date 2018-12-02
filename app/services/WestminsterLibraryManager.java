@@ -17,12 +17,16 @@ public class WestminsterLibraryManager implements LibraryManager {
 
     private static DecimalFormat df2 = new DecimalFormat(".##");
 
+//    Add a new book
+
     @Override
     public String addBook(int isbn, String itemName, String authorId, String readerId, String pageCount) {
         LibraryItem item = getItemByIsbn(isbn);
 
         BookModel book = new BookModel();
         book.setIsbn(isbn);
+
+//        Check item already exists
 
         if(item != null){
             if(item.isStatus()) {
@@ -55,6 +59,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         return "Book added Successfully";
     }
 
+//    Create a new dvd
 
     @Override
     public String addDvd(int isbn, String itemName, String publisherId, String readerId, String languages) {
@@ -62,6 +67,9 @@ public class WestminsterLibraryManager implements LibraryManager {
         LibraryItem item = getItemByIsbn(isbn);
         DVDModel dvd = new DVDModel();
         dvd.setIsbn(isbn);
+
+//        Check the item already exists
+
         if(item != null){
             if(item.isStatus()) {
                 return "Item with this ISBN alrady exists";
@@ -90,11 +98,15 @@ public class WestminsterLibraryManager implements LibraryManager {
         return "DVD added Successfully";
     }
 
+//    Get Item by ISBN number
+
     private LibraryItem getItemByIsbn(int isbn) {
+//        find Books
         BookModel book = Ebean.find(BookModel.class).where().eq("isbn", isbn).findOne();
         if(book != null){
             return getBookDTObyModel(book);
         }else {
+//            find dvds
             DVDModel dvd = Ebean.find(DVDModel.class).where().eq("isbn", isbn).findOne();
             if(dvd != null){
                 return getDVDDTObyModel(dvd);
@@ -103,6 +115,8 @@ public class WestminsterLibraryManager implements LibraryManager {
 
         return null;
     }
+
+//    Get All Books
 
     @Override
     public List<Book> getAllBooks() {
@@ -118,6 +132,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         return books;
     }
 
+//    Get all dvds
+
     @Override
     public List<DVD> getAllDvds() {
         List<DVDModel> DVDModels = Ebean.find(DVDModel.class).where().eq("status", true).findList();
@@ -132,6 +148,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         return dvds;
     }
 
+//    Get All Items
+
     @Override
     public List<LibraryItem> getAllItems() {
         List<LibraryItem> items = new ArrayList<>();
@@ -141,13 +159,17 @@ public class WestminsterLibraryManager implements LibraryManager {
         return items;
     }
 
+//    Delete an item
+
     @Override
     public void deleteItem(long isbn) {
+//        Check for books and delete
         BookModel book = Ebean.find(BookModel.class).where().eq("isbn", isbn).findOne();
         if (book != null) {
             book.setStatus(false);
             Ebean.save(book);
         } else {
+//            else check dvds and delete
             DVDModel dvd = Ebean.find(DVDModel.class).where().eq("isbn", isbn).findOne();
             if (dvd != null) {
                 dvd.setStatus(false);
@@ -156,6 +178,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         }
     }
 
+//    Get all readers
     @Override
     public List<Reader> getAllReaders() {
         List<ReaderModel> readerModels = Ebean.find(ReaderModel.class).findList();
@@ -169,6 +192,8 @@ public class WestminsterLibraryManager implements LibraryManager {
 
         return readers;
     }
+
+//    Get all authors
 
     @Override
     public List<Author> getAllAuthors() {
@@ -184,6 +209,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         return authors;
     }
 
+//    Get All Publishers
+
     @Override
     public List<Publisher> getAllPublishers() {
         List<PublisherModel> publisherModels = Ebean.find(PublisherModel.class).findList();
@@ -198,6 +225,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         return publishers;
     }
 
+//    Retun an item
 
     @Override
     public String returnItem(long isbn) {
@@ -214,7 +242,6 @@ public class WestminsterLibraryManager implements LibraryManager {
                 book.setBorrowDate(null);
 
                 Ebean.save(book);
-
                 if (diff > 7) {
                     double fee = calculateFee(diffInMillies, diff, 7);
                     message = "You have exceeded the time, your fee is £ " + df2.format(fee);
@@ -255,6 +282,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         return message;
     }
 
+//Borrow an item
+
     @Override
     public String borrowItem(long isbn, String readerId) {
         String message = "";
@@ -292,6 +321,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         return message;
     }
 
+//    Genrate report
+
     @Override
     public List<OverDueItem> getReport() {
         List<LibraryItem> items = getAllItems();
@@ -313,7 +344,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         return overDueItems;
     }
 
-
+// Get Retun date of an item
 
     private Date itemReturnDate(LibraryItem overDueItem) {
         String className = overDueItem.getClass().getName();
@@ -331,6 +362,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         c.add(Calendar.DAY_OF_MONTH, maxDays);
         return c.getTime();
     }
+
+//    Calculate fine of an item
 
     private double calculateFee(LibraryItem item) {
         String className = item.getClass().getName();
@@ -360,6 +393,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         return round(fee,2);
     }
 
+//    Cheack wheather item s overduded
+
     private boolean isOverDude(LibraryItem item) {
         String className = item.getClass().getName();
         if(item.getReader()==null){
@@ -380,6 +415,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         return (diff > maxDays);
     }
 
+//    Add date to a date
 
     private Date addDaysToDate(Date borrowDate, int days) {
         Calendar c = Calendar.getInstance();
@@ -388,6 +424,8 @@ public class WestminsterLibraryManager implements LibraryManager {
 
         return c.getTime();
     }
+
+    // get Book From Book Modal
 
     private Book getBookDTObyModel(BookModel bookModel) {
 
@@ -413,6 +451,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         return book;
     }
 
+//    GEt DVD From DVD Modal
+
     private DVD getDVDDTObyModel(DVDModel dvdModel) {
         DVD dvd = new DVD(dvdModel.getIsbn(),dvdModel.getName(),"DVD",dvdModel.getLanguages());
         dvd.setStatus(dvdModel.getStatus());
@@ -426,22 +466,30 @@ public class WestminsterLibraryManager implements LibraryManager {
         return dvd;
     }
 
+//    Get Reader From Reader modal
+
     private Reader getReaderDTObyModel(ReaderModel readerModel) {
 
         return new Reader(readerModel.getId(),readerModel.getName(),readerModel.getEmail(),readerModel.getMobile());
     }
 
+//    Get Author from Autor modal
 
     private Author getAuthorDTObyModel(AuthorModel authorModel) {
         Author author = new Author(authorModel.getId(),authorModel.getName());
 
         return author;
     }
+
+//    Get publisher from Publisher Modal
+
     private Publisher getPublisherDTObyModel(PublisherModel publisherModel) {
         Publisher publisher = new Publisher(publisherModel.getId(),publisherModel.getName());
 
         return publisher;
     }
+
+//    Convert Date to string
 
     private String convertDateToString(Date date) {
 
@@ -449,6 +497,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         String strDate = dateFormat.format(date);
         return strDate;
     }
+
+//    CAlclate fee of an item
 
     private double calculateFee(long difference, long diff, int max) {
         double fee = 0;
@@ -463,6 +513,8 @@ public class WestminsterLibraryManager implements LibraryManager {
         }
         return fee;
     }
+
+//    Round a doubl to two decimal points
 
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
