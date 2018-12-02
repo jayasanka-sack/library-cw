@@ -3,6 +3,11 @@ package dto;
 import java.util.List;
 
 public class Book extends LibraryItem {
+    public Book(int itemID, String itemName, String type, int pageCount, List<Author> authors) {
+        super(itemID, itemName, type);
+        this.pageCount = pageCount;
+        this.authors = authors;
+    }
 
     private int pageCount;
 

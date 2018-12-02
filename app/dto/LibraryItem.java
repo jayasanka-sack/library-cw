@@ -10,6 +10,7 @@ public abstract class LibraryItem {
     private Date borrowDate;
     private String borrowDateText;
     private String type;
+    private boolean status = true;
 
     public String getType() {
         return type;
@@ -19,22 +20,13 @@ public abstract class LibraryItem {
         this.type = type;
     }
 
-    public LibraryItem() {
 
-    }
-
-    public LibraryItem(int itemID, String itemName, Reader reader, Date borrowDate, String borrowDateText, String type, boolean status) {
+    public LibraryItem(int itemID, String itemName, String type) {
         this.itemID = itemID;
         this.itemName = itemName;
-        this.reader = reader;
-        this.borrowDate = borrowDate;
-        this.borrowDateText = borrowDateText;
         this.type = type;
-        this.status = status;
     }
 
-
-    private boolean status;
 
     public boolean isStatus() {
         return status;
