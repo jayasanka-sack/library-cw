@@ -443,9 +443,7 @@ public class WestminsterLibraryManager implements LibraryManager {
         return author;
     }
     private Publisher getPublisherDTObyModel(PublisherModel publisherModel) {
-        Publisher publisher = new Publisher();
-        publisher.setPublisherID(publisherModel.getId());
-        publisher.setPublisherName(publisherModel.getName());
+        Publisher publisher = new Publisher(publisherModel.getId(),publisherModel.getName());
 
         return publisher;
     }
