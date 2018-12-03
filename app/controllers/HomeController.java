@@ -119,7 +119,7 @@ public class HomeController extends Controller {
 
         libraryManager.deleteItem(isbn);
 
-        return ok("hoo");
+        return ok("Item deleted");
 
     }
 
